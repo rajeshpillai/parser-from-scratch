@@ -1,7 +1,10 @@
 const assert = require('assert');
 const {Parser} = require('../src/parser');
 
-const tests = [require('./literals-test.js')]
+const tests = [
+  require('./literals-test.js'),
+  require('./statement-list-test.js'),
+];
 
 const parser = new Parser();
 
@@ -33,7 +36,7 @@ function test (program, expected) {
 }
 
 // Manual test
-exec();
+// exec();
 
 // Run all test 
 tests.forEach(testRun => testRun(test));
