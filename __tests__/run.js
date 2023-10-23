@@ -16,6 +16,16 @@ let program = "";
 
 
 // For manual test
+
+function exec_sxpression() {
+  program = `
+    42;
+  `;
+
+  const ast = parser.parse(program);
+  console.log(JSON.stringify(ast, null, 2));
+}
+
 function exec() {
   program = `
     /**
@@ -38,9 +48,10 @@ function test (program, expected) {
 }
 
 // Manual test
-// exec();
+//exec();
+exec_sxpression();
 
 // Run all test 
-tests.forEach(testRun => testRun(test));
+// tests.forEach(testRun => testRun(test));
 console.log('All tests passed!');
 
