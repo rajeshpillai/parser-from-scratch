@@ -43,6 +43,19 @@ class Tokenizer {
       }
     }
 
+    // String: Single quoet
+    if (string[0] === "'") { 
+      let s = '';
+      do {
+        s += string[this._cursor++];
+      } while (string[this._cursor] !== "'" && !this.isEOF());
+      s+= this._cursor++;  // Skip '
+      return {
+        type: 'STRING',
+        value: s,
+      }
+    }
+
     return null;
   }
 }
