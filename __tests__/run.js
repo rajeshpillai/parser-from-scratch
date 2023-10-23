@@ -3,6 +3,8 @@ const {Parser} = require('../src/parser');
 const parser = new Parser();
 
 const program = '42';
+// const program = '"42"';
+// const program = "'42'";  // Assignment: single quoted string
 
 const ast = parser.parse(program);
 
