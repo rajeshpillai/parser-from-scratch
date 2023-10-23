@@ -4,7 +4,7 @@ const parser = new Parser();
 
 // const program = '42';
 // const program = '"42"';
-const program = "'42'";  // Assignment: single quoted string
+const program = `'42'`;  // Assignment: single quoted string
 
 const ast = parser.parse(program);
 
