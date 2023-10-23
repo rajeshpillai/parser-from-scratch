@@ -5,8 +5,15 @@ const Spec = [
   [/^\/\/.*/, null],     // single line comment
   [/^\/\*[\s\S]*?\*\//, null], // multi-line comment
   [/^\s+/, null],        // whitespace
+  
+  
+  // Symbol, delimiters
   [/^;/, ';'],           // semicolon
+  [/^\{/, '{'],           // {
+  [/^\}/, '}'],           // {
+  
   [/^\d+/, 'NUMBER'],    // number
+
   [/"[^"]*"/, 'STRING'], // double quoted string
   [/'[^']*'/, 'STRING'], // single quoted string
 

@@ -4,6 +4,7 @@ const {Parser} = require('../src/parser');
 const tests = [
   require('./literals-test.js'),
   require('./statement-list-test.js'),
+  require('./block-test.js'),
 ];
 
 const parser = new Parser();
