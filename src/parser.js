@@ -4,82 +4,6 @@
 
 const { Tokenizer} = require('./tokenizer');
 
-// ------------------------------------------------
-// Default AST node factories
-const DefaultFactory = {
-  Program(body) {
-    return {
-      type: 'Program',
-      body,
-    }
-  }, 
-
-  EmptyStatement() {
-    return {
-      type: 'EmptyStatement'
-    }
-  },
-
-  BlockStatement(body) {
-    return {
-      type: 'BlockStatement',
-      body,
-    }
-  },
-  
-  ExpressionStatement(expression) {
-    return {
-      type: 'ExpressionStatement',
-      expression,
-    }
-  },
-
-  StringLiteral(value) {
-    return {
-      type: 'StringLiteral',
-      value,
-    }
-  },
-
-  NumericLiteral(value) {
-    return {
-      type: 'NumericLiteral',
-      value,
-    }
-  }
-}
-
-
-// ------------------------------------------------
-// S-expression AST node factories 
-const SExpressionFactory = { 
-  Program(body) {
-    return ['begin', body];
-  },
-
-  EmptyStatement() {},
-
-  BlockStatement(body) {
-    return ['begin', body];
-  },
-
-  ExpressionStatement(expression) { 
-    return expression;
-  },
-
-  StringLiteral(value) {
-    return `"value"`; 
-  },
-
-  NumericLiteral(value) {
-    return value;
-  },
-
-}
-
-// TODO:  Make AST_MODE parameterized
-const AST_MODE = 's-expression';  // 'default' or 's-expression'
-const factory = AST_MODE === 'default' ? DefaultFactory : SExpressionFactory;
 
 class Parser {
   constructor() {
@@ -105,7 +29,10 @@ class Parser {
    *  : StatementList 
    */
   Program() {
-    return factory.Program(this.StatementList());
+    return {
+      type: 'Program',
+      body: this.StatementList(),
+    }
   }
 
   /** 
@@ -146,7 +73,9 @@ class Parser {
    */
   EmptyStatement() { 
     this._eat(';');
-    return factory.EmptyStatement();
+    return {
+      type: 'EmptyStatement',
+    }
   }
 
 
@@ -161,7 +90,10 @@ class Parser {
     const body = this._lookahead.type === '}' ? [] : this.StatementList('}'); 
     this._eat('}'); 
 
-    return factory.BlockStatement(body);
+    return {
+      type: 'BlockStatement', 
+      body
+    }
   }
 
 
@@ -174,7 +106,10 @@ class Parser {
   ExpressionStatement() {
     const expression = this.Expression(); 
     this._eat(';'); 
-    return factory.ExpressionStatement(expression);
+    return {
+      type: 'ExpressionStatement',
+      expression,
+    }
   }
 
   /**
@@ -197,11 +132,9 @@ class Parser {
   Literal() {
     switch(this._lookahead.type) {
       case 'NUMBER':
-        return factory.NumericLiteral(this._eat('NUMBER').value);
-        //return this.NumericLiteral();
+        return this.NumericLiteral();
       case 'STRING':
-        return factory.StringLiteral(this._eat('STRING').value);
-        //return this.StringLiteral();
+        return this.StringLiteral();
       default:
         throw new SyntaxError(`Unexpected token: "${this._lookahead.value}"`);
     }

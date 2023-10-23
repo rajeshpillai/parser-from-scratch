@@ -52,6 +52,6 @@ function test (program, expected) {
 exec_sxpression();
 
 // Run all test 
-// tests.forEach(testRun => testRun(test));
+tests.forEach(testRun => testRun(test));
 console.log('All tests passed!');
 
