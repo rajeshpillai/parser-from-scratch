@@ -2,7 +2,8 @@ const {Parser} = require('../src/parser');
 
 const parser = new Parser();
 
-const program = '42';
+// const program = `   42  `;       // This is number
+const program = `   "  42    " `;   // This is string token
 // const program = '"42"';
 // const program = `'42'`;  // Assignment: single quoted string
 

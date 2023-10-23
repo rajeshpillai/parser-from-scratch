@@ -2,9 +2,10 @@
  * Tokenizer Spec
  */
 const Spec = [
-  [/^\d+/, 'NUMBER'],
-  [/"[^"]*"/, 'STRING'],
-  [/'[^']*'/, 'STRING'],
+  [/^\s+/, null],        // whitespace
+  [/^\d+/, 'NUMBER'],    // number
+  [/"[^"]*"/, 'STRING'], // double quoted string
+  [/'[^']*'/, 'STRING'], // single quoted string
 
 ];
 
@@ -22,6 +23,7 @@ class Tokenizer {
     return this._cursor === this._string.length;
   }
 
+  // Returns the next token 
   getNextToken() {
     if (!this.hasMoreTokens()) {
       return null;
@@ -30,9 +32,17 @@ class Tokenizer {
 
     for (const [regexp, tokenType] of Spec) {
       const tokenValue = this._match(regexp, string); 
+      
+      // Couldn't match the rule
       if (tokenValue == null) {
         continue;
       }
+
+      // Should skip token, e.g. whitespace.
+      if (tokenType == null) {
+        return this.getNextToken();
+      }
+
       return {
         type: tokenType,
         value: tokenValue
@@ -47,7 +57,7 @@ class Tokenizer {
     if (matched == null) { 
       return null;
     }
-    this._cursor = matched[0].length;
+    this._cursor += matched[0].length;
     return matched[0]
   }
 }
