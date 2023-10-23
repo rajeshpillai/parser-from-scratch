@@ -32,6 +32,10 @@ function test (program, expected) {
   assert.deepEqual(ast, expected);
 }
 
+// Manual test
+exec();
+
 // Run all test 
 tests.forEach(testRun => testRun(test));
 console.log('All tests passed!');
+
