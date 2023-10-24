@@ -10,6 +10,7 @@ const tests = [
   require('./assignment-test.js'),
   require('./variable-test.js'),
   require('./if-test.js'),
+  require('./relational-test.js'),
 ];
 
 const parser = new Parser();
@@ -25,11 +26,40 @@ function exec() {
       r = 10;
       
       let x = 42;
+
+      // if/ele
       if (x) {
         x = 0;
       } else {
         x += 1;
       }
+
+      // only if 
+      if (x) {
+        x = 0;
+      }
+
+      // Shortcut
+      if (x) x = 0;
+
+      // Nested if
+      if(x) if(y) {} else {};
+      if(x) if(y) {} else {} else {};
+
+      // Relational expression and equality
+      if (x + 5 > 10)  {
+        x = 10;
+      } else {
+        x += 1;
+      }
+
+      if (x + 5 >= 10)  {
+        x = 10;
+      } else {
+        x += 1;
+      }
+
+      x + 5 > 10;  // (x + 5) > 10
   `;  
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, null, 2));

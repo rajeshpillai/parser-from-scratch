@@ -208,13 +208,13 @@ class Parser {
 
   /** 
    * AssignmentExpression
-   *  : AdditiveExpression 
+   *  : RelationalExpression 
    *  | LeftHandSideExpression AssignmentOpertor AssignmentExpression 
    */
 
   // Assignment can be chained, x = y = 42
   AssignmentExpression() {
-    const left = this.AdditiveExpression();
+    const left = this.RelationalExpression();
     if (!this._isAssignmentOperator(this._lookahead.type)) {
       return left;
     }
@@ -276,6 +276,23 @@ class Parser {
     }
     return this._eat('COMPLEX_ASSIGN');
   }
+
+  /** Relational Operator: >, >=, <, <=  
+   * 
+   *    x > y
+   *    x >= y
+   *    x < y
+   *    x <= y
+   *  
+   * RelationalExpression
+   * : AdditiveExpression 
+   * | AdditiveExpression RELATIONAL_OPERATOR AdditiveExpression
+   * 
+  */
+  RelationalExpression() {
+    return this._BinaryExpression('AdditiveExpression', 'RELATIONAL_OPERATOR');
+  }
+
 
   /** 
    * AdditiveExpression 

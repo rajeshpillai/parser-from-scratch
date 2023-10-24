@@ -35,6 +35,10 @@ const Spec = [
   [/^=/, 'SIMPLE_ASSIGN'],
   [/^[\*\/\+\-]=/,'COMPLEX_ASSIGN'],
 
+  // ----------------------------------------
+  // Relational operators: >, >=, <, <= 
+  [/^[><]=?/, 'RELATIONAL_OPERATOR'],
+
   // Math operators: +, -, *, / 
   [/^[+\-]/, 'ADDITIVE_OPERATOR'],
   [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],
