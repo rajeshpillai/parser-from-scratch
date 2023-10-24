@@ -6,6 +6,7 @@ const tests = [
   require('./statement-list-test.js'),
   require('./block-test.js'),
   require('./empty-statement-test.js'),
+  require('./math-test.js'),
 ];
 
 const parser = new Parser();
@@ -16,24 +17,11 @@ let program = "";
 
 
 // For manual test
-
-function exec_sxpression() {
-  program = `
-    42;
-  `;
-
-  const ast = parser.parse(program);
-  console.log(JSON.stringify(ast, null, 2));
-}
-
 function exec() {
   program = `
-    /**
-     Documentation comment:
-    */
-    "hello";
-    // Number: 
     42;
+    42 + 10;
+    42 + 23 - 10;
   `;  
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, null, 2));
@@ -41,15 +29,13 @@ function exec() {
 
 
 // Test function 
-
 function test (program, expected) {
   const ast = parser.parse(program);
   assert.deepEqual(ast, expected);
 }
 
 // Manual test
-//exec();
-exec_sxpression();
+exec();
 
 // Run all test 
 tests.forEach(testRun => testRun(test));

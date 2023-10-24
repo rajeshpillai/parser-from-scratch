@@ -119,8 +119,30 @@ class Parser {
    */
 
   Expression() { 
-    return this.Literal();
+    return this.AdditiveExpression();
   }
+
+  /** 
+   * AdditiveExpression 
+   *  : Literal
+   *  | AdditiveExpression ADDITIVE_OPERATOR Literal
+   */
+  AdditiveExpression() {
+    let left = this.Literal(); 
+    while(this._lookahead.type === 'ADDITIVE_OPERATOR') {
+      // Operator: + or - 
+      const operator = this._eat('ADDITIVE_OPERATOR').value; 
+      const right = this.Literal();
+      left = {
+        type: 'BinaryExpression',
+        operator,
+        left,
+        right,
+      };
+    }
+    return left;
+  }
+
 
   /**
    * Literal
