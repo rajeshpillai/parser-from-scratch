@@ -124,15 +124,15 @@ class Parser {
 
   /** 
    * AdditiveExpression 
-   *  : Literal
-   *  | AdditiveExpression ADDITIVE_OPERATOR Literal
+   *  : MultiplicativeExpression
+   *  | AdditiveExpression ADDITIVE_OPERATOR MultiplicativeExpression -> MultiplicativeExpression ADDITIVE_OPERATOR MultiplicativeExpression
    */
   AdditiveExpression() {
-    let left = this.Literal(); 
+    let left = this.MultiplicativeExpression(); 
     while(this._lookahead.type === 'ADDITIVE_OPERATOR') {
       // Operator: + or - 
       const operator = this._eat('ADDITIVE_OPERATOR').value; 
-      const right = this.Literal();
+      const right = this.MultiplicativeExpression();
       left = {
         type: 'BinaryExpression',
         operator,
@@ -141,6 +141,36 @@ class Parser {
       };
     }
     return left;
+  }
+
+   /** 
+   * MultiplicativeExpression 
+   *  : PrimaryExpression
+   *  | MultiplicativeExpression MULTIPLICATIVE_OPERATOR PrimaryExpression -> PrimaryExpression MULTIPLICATIVE_OPERATOR MultiplicativeExpression
+   */
+   MultiplicativeExpression() {
+    let left = this.PrimaryExpression(); 
+    while(this._lookahead.type === 'MULTIPLICATIVE_OPERATOR') {
+      // Operator: + or - 
+      const operator = this._eat('MULTIPLICATIVE_OPERATOR').value; 
+      const right = this.PrimaryExpression();
+      left = {
+        type: 'BinaryExpression',
+        operator,
+        left,
+        right,
+      };
+    }
+    return left;
+  }
+
+  /** 
+   * PrimaryExpression
+   *  : Literal
+   *  ;
+   */
+  PrimaryExpression() {
+    return this.Literal();
   }
 
 
