@@ -16,6 +16,7 @@ const tests = [
   require('./unary-test.js'),
   require('./while-test.js'),
   require('./do-while-test.js'),
+  require('./for-test.js'),
 ];
 
 const parser = new Parser();
@@ -27,6 +28,18 @@ function exec() {
       do {
         x -= 1;
       } while(x > 10);
+
+      for (let i = 0; i < 10; i += 1) {
+        x += i;
+      }
+
+      for (let i = 0, z = 0;  i < 10; i += 1) {
+        x += i;
+      }
+
+      for (; ;) {
+        x += i;
+      }
   `;  
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, null, 2));
