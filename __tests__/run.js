@@ -11,6 +11,7 @@ const tests = [
   require('./variable-test.js'),
   require('./if-test.js'),
   require('./relational-test.js'),
+  require('./equality-test.js'),
 ];
 
 const parser = new Parser();
@@ -27,7 +28,7 @@ function exec() {
       
       let x = 42;
 
-      // if/ele
+      // if/esle
       if (x) {
         x = 0;
       } else {
@@ -60,6 +61,13 @@ function exec() {
       }
 
       x + 5 > 10;  // (x + 5) > 10
+
+      // Relational expression and equality
+      x + 5 > 10 == true; // (x + 5) > 10 == true
+
+      // x > 5 && y < 10; // (x > 5) && (y < 10)
+
+
   `;  
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, null, 2));

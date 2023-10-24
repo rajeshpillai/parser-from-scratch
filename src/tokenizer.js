@@ -20,6 +20,9 @@ const Spec = [
   [/^\blet\b/, 'let'],   // let keyword
   [/^\bif\b/, 'if'],     // if keyword
   [/^\belse\b/, 'else'], // else keyword
+  [/^\btrue\b/, 'true'], // true keyword
+  [/^\bfalse\b/, 'false'], // false keyword
+  [/^\bnull\b/, 'null'], // null keyword
   
   // ----------------------------------------
   // NUmber should be above Identifiers
@@ -28,6 +31,11 @@ const Spec = [
   // ----------------------------------------
   // Identifiers
   [/^\w+/, 'IDENTIFIER'],
+
+  // ----------------------------------------
+  // Euality operators: ==, != 
+  [/^[=!]=/, 'EQUALITY_OPERATOR'],
+
 
   // ----------------------------------------
   // Asignment operators: = , *=, /=, +=, -= 

@@ -208,13 +208,13 @@ class Parser {
 
   /** 
    * AssignmentExpression
-   *  : RelationalExpression 
+   *  : EqualityExpression 
    *  | LeftHandSideExpression AssignmentOpertor AssignmentExpression 
    */
 
   // Assignment can be chained, x = y = 42
   AssignmentExpression() {
-    const left = this.RelationalExpression();
+    const left = this.EqualityExpression();
     if (!this._isAssignmentOperator(this._lookahead.type)) {
       return left;
     }
@@ -275,6 +275,18 @@ class Parser {
       return this._eat('SIMPLE_ASSIGN');
     }
     return this._eat('COMPLEX_ASSIGN');
+  }
+
+  /** EQALITY_OPERATOR: ==, != 
+   *    x == y 
+   *    x != y
+   * 
+   *  EqualityExpression 
+   *  : RelationalExpression EQUALITY_OPERATOR RelationalExpression
+   *  | RelationalExpression
+  */
+  EqualityExpression() {
+    return this._BinaryExpression('RelationalExpression', 'EQUALITY_OPERATOR');
   }
 
   /** Relational Operator: >, >=, <, <=  
@@ -354,7 +366,13 @@ class Parser {
    * Whether the token is a literal
    */
    _isLiteral(tokenType) {
-    return tokenType === 'NUMBER' || tokenType === 'STRING';
+    return (
+      tokenType === 'NUMBER' || 
+      tokenType === 'STRING' ||
+      tokenType === 'true' || 
+      tokenType === 'false' ||
+      tokenType === 'null'
+    );
   }
 
   /** 
@@ -375,6 +393,8 @@ class Parser {
    * Literal
    *  : NumericLiteral
    *  | StringLiteral
+   *  | BooleanLiteral
+   *  | NullLiteral
    *  ;
    */
 
@@ -384,9 +404,40 @@ class Parser {
         return this.NumericLiteral();
       case 'STRING':
         return this.StringLiteral();
+      case 'true':
+        return this.BooleanLiteral(true);
+      case 'false':
+        return this.BooleanLiteral(false);
+      case 'null':
+        return this.NullLiteral(false);
       default:
         throw new SyntaxError(`Unexpected token: "${this._lookahead.value}"`);
     }
+  }
+
+  /** BooleanLiteral
+   *    : 'true' 
+   *    | 'false' 
+   *    ;
+   */
+  BooleanLiteral(value) {
+    this._eat(value ? 'true' : 'false');  // consume the token
+    return {
+      type: 'BooleanLiteral',
+      value,
+    };
+  }
+
+  /** NullLiteral
+   *   : 'null'
+   *  ;
+   */
+  NullLiteral() {
+    this._eat('null');  // consume the token
+    return {
+      type: 'NullLiteral',
+      value: null,
+    };
   }
 
   /**
