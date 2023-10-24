@@ -62,6 +62,8 @@ class Parser {
     switch(this._lookahead.type) {
       case ';':
         return this.EmptyStatement();
+      case 'if':
+        return this.IfStatement();
       case '{': 
         return this.BlockStatement();
       case 'let': 
@@ -69,6 +71,29 @@ class Parser {
       default: 
         return this.ExpressionStatement();
     }
+  }
+  /** IfStatement
+   *  : 'if' '(' Expression ')' Statement
+   *  | 'if' '(' Expression ')' Statement 'else' Statement
+   */
+  IfStatement() {
+    this._eat('if');
+    this._eat('(');
+    const test = this.Expression();
+    this._eat(')');
+    const consequent = this.Statement();
+    const alternate = this._lookahead != null && this._lookahead.type === 'else' ? this._parseElse() : null;
+    return {
+      type: 'IfStatement',
+      test,
+      consequent,
+      alternate,
+    }
+  }
+
+  _parseElse() {
+    this._eat('else');
+    return this.Statement();
   }
 
   /** 
@@ -110,7 +135,7 @@ class Parser {
       : null;
     return {
       type: 'VariableDeclaration',
-      identifier,
+      id: identifier,
       init,
     }
   }
@@ -380,7 +405,7 @@ class Parser {
       throw new SyntaxError(`Unexpected end of input, expected: "${tokenType}"`);
     }
     if (token.type !== tokenType) {
-      throw new SyntaxError(`Unexpected token: "${token.value}, expected: ${tokenType}`);
+      throw new SyntaxError(`Unexpected token: ${token.value}, expected: ${tokenType}`);
     }
 
     this._lookahead = this._tokenizer.getNextToken();

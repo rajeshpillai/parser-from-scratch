@@ -18,7 +18,9 @@ const Spec = [
   // ---------------------------------------- 
   // Keywords 
   [/^\blet\b/, 'let'],   // let keyword
-
+  [/^\bif\b/, 'if'],     // if keyword
+  [/^\belse\b/, 'else'], // else keyword
+  
   // ----------------------------------------
   // NUmber should be above Identifiers
   [/^\d+/, 'NUMBER'],    // number
