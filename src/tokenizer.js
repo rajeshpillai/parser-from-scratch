@@ -23,7 +23,10 @@ const Spec = [
   [/^\btrue\b/, 'true'], // true keyword
   [/^\bfalse\b/, 'false'], // false keyword
   [/^\bnull\b/, 'null'], // null keyword
-  
+  [/^\bwhile\b/, 'while'],
+  [/^\bdo\b/, 'do'],
+  [/^\bfor\b/, 'for'],
+
   // ----------------------------------------
   // NUmber should be above Identifiers
   [/^\d+/, 'NUMBER'],    // number
