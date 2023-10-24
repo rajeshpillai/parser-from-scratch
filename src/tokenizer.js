@@ -11,8 +11,10 @@ const Spec = [
   [/^;/, ';'],           // semicolon
   [/^\{/, '{'],           // {
   [/^\}/, '}'],           // {
+  [/^\(/, '('],           
+  [/^\)/, ')'],           
 
-  // Math operators: +, -, * 
+  // Math operators: +, -, *, / 
   [/^[+\-]/, 'ADDITIVE_OPERATOR'],
   [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],
   

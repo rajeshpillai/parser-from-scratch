@@ -167,12 +167,31 @@ class Parser {
   /** 
    * PrimaryExpression
    *  : Literal
+   *  | ParenthesizedExpression
    *  ;
    */
   PrimaryExpression() {
-    return this.Literal();
+    switch(this._lookahead.type) {
+      case '(': 
+        return this.ParenthesizedExpression(); 
+      default: 
+      return this.Literal();
+    }
   }
 
+  /** 
+   * ParenthesizedExpression
+   *  : '(' Expression ')'
+   *  
+   */
+  ParenthesizedExpression() {
+    this._eat('(');
+    const expression = this.Expression();
+    this._eat(')');
+
+    // In the AST we don't see open parenthesis but will see the correct precedence by returning expression
+    return expression;
+  }
 
   /**
    * Literal

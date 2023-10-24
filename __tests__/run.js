@@ -19,11 +19,13 @@ let program = "";
 // For manual test
 function exec() {
   program = `
-    42;
-    42 + 10;
-    42 + 23 - 10;
-    2 + 2 * 2;
-    2 * 2 * 2;
+  // 42;
+  // 42 + 10;
+  // 42 + 23 - 10;
+  // 2 * 2 * 2;
+  (2 + 2 ) * 2;
+  2 + 2 * 2;
+  (2);
   `;  
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, null, 2));
