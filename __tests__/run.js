@@ -8,6 +8,8 @@ const tests = [
   require('./empty-statement-test.js'),
   require('./math-test.js'),
   require('./assignment-test.js'),
+  require('./variable-test.js'),
+  // require('./if-test.js'),
 ];
 
 const parser = new Parser();
@@ -19,9 +21,15 @@ function exec() {
       let y;
       let a, b;
       let c, d = 10;
-      let x = 42;
       let foo = bar = 10;   // let foo = (bar = 10);
       r = 10;
+      
+      // let x = 42;
+      // if (x) {
+      //   x = 0;
+      // } else {
+      //   x += 1;
+      // }
   `;  
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, null, 2));
