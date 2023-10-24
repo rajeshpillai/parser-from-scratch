@@ -561,12 +561,80 @@ class Parser {
 
   /** 
    * LeftHandSideExpression 
-   * : MemberExpression 
+   * : CallMemberExpression 
    * ;
    */
     LeftHandSideExpression() { 
-      return this.MemberExpression();
+      return this.CallMemberExpression();
     }
+
+    /** CallMemberExpression
+     *    : MemberExpression 
+     *    | CallExpression 
+     *    ;
+     */
+    CallMemberExpression() {
+      let member = this.MemberExpression();
+      // See if we have a call expression
+      if (this._lookahead.type === '(') {   // TODO: Should this be in while loop
+        return this._CallExpression(member);
+      } 
+      return member;
+    }
+
+    /** Generic call expression helper
+     * 
+     *  CallExpression
+     *   : Callee Arguments 
+     *   ;
+     *  Callee 
+     *    : MemberExpression 
+     *    | CallExpression 
+     *    ;
+     */
+    _CallExpression(callee) {
+      let callExpression =  {
+        type: 'CallExpression',
+        callee,
+        arguments: this.Arguments(),
+      };
+
+      if (this._lookahead.type === '(') {
+        callExpression = this._CallExpression(callExpression);
+      }   
+      return callExpression;
+    }
+    /** Arguments 
+     * : '(' OptArgumentList ')'   
+     * ;
+     */
+    Arguments() {
+      this._eat('(');
+      const args = this._lookahead.type === ')' ? [] : this.ArgumentList();
+      this._eat(')');
+      return args;
+    }
+
+    /** ArgumentList 
+     *    : ArgumentExpression
+     *    | ArgumentList ',' AssignmentExpression  eg foo(bar = 1, baz = 2)
+     */
+    ArgumentList() {
+      const args = [this.AssignmentExpression()];
+      while(this._lookahead.type === ',') {
+        this._eat(',');
+        args.push(this.AssignmentExpression());
+      }
+      return args;
+    }
+
+    // ArgumentList() {
+    //   const args = [];
+    //   do {
+    //     args.push(this.AssignmentExpression());
+    //   } while (this._lookahead.type === ',' && this._eat(','))
+    // }
+
 
     /** MemberExpression 
      *    : PrimaryExpression 
@@ -585,8 +653,10 @@ class Parser {
             computed: false,
             object,
             property,
-          }
-        } else {
+          };
+        } 
+        // MemberExpression '[' Expression ']'
+        if (this._lookahead.type === '[') {
           this._eat('[');
           const property = this.Expression();
           this._eat(']');

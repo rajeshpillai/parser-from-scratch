@@ -19,6 +19,7 @@ const tests = [
   require('./for-test.js'),
   require('./function-declaration-test.js'),
   require('./member-test.js'),
+  require('./call-test.js'),
 ];
 
 const parser = new Parser();
@@ -30,12 +31,12 @@ function exec() {
     let s = "Hello, World!";
     let i = 0;
     while (i < s.length) {
-      s[i];  // computed property
-      //console.log(i, s[i])  // functio call not yet implemented
+      console.log(i, s[i]);
       i += 1;
     }
 
-    a.b.c['d'];
+    square(2);
+    getCallback()();
   `;  
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, null, 2));
