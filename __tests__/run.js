@@ -12,28 +12,16 @@ const tests = [
 
 const parser = new Parser();
 
-// NOTE:  The program variable is overwritten in each test case.
-// The last one is the active test program
-let program = "";
-
 
 // For manual test
 function exec() {
-  program = `
-  // 42;
-  // 42 + 10;
-  // 42 + 23 - 10;
-  // 2 * 2 * 2;
-  // 2 + 2 * 2;
-  (2);
-  (2 + 2 ) * 2;
-  x = 30;
-  x = y = 42;
-  //42 = 42;  // This should throw error
-  42 + 42; // This should work
-  x + x;  // This should work
-  x = y + 10;
-  x += 1; 
+  const program = `
+      let y;
+      let a, b;
+      let c, d = 10;
+      let x = 42;
+      let foo = bar = 10;   // let foo = (bar = 10);
+      r = 10;
   `;  
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, null, 2));

@@ -54,6 +54,7 @@ class Parser {
    *    : ExpressionStatement 
    *    | BlockStatement
    *    | EmptyStatement
+   *    | VariableStatemnt
    *    ;
    */
 
@@ -61,9 +62,67 @@ class Parser {
     switch(this._lookahead.type) {
       case ';':
         return this.EmptyStatement();
-      case '{': return this.BlockStatement();
-      default: return this.ExpressionStatement();
+      case '{': 
+        return this.BlockStatement();
+      case 'let': 
+        return this.VariableStatement();
+      default: 
+        return this.ExpressionStatement();
     }
+  }
+
+  /** 
+   * VariableStatement
+   *  : 'let' VariableDeclarationList ';' 
+   *  ; 
+   */
+  VariableStatement() {
+    this._eat('let');
+    const declarations = this.VariableDeclarationList();
+    this._eat(';');
+    return {
+      type: 'VariableStatement',
+      declarations,
+    }
+  }
+  /** 
+   * VariableDeclarationList 
+   *  : VariableDeclaration 
+   *  | VariableDeclarationList ',' VariableDeclaration -> VariableDeclaration VariableDeclaration VariableDeclaration
+   */
+  VariableDeclarationList() { 
+    const declarations = [this.VariableDeclaration()];
+    while(this._lookahead.type === ',') {
+      this._eat(',');
+      declarations.push(this.VariableDeclaration());
+    }
+    return declarations;
+  }
+
+  /** VariableDeclaration 
+   * : Identifier OptVariableInitializer
+   * ;
+   */
+  VariableDeclaration() {
+    const identifier = this.Identifier();
+    const init = this._lookahead.type !== ';' && this._lookahead.type !== ',' 
+      ? this.VariableInitializer()
+      : null;
+    return {
+      type: 'VariableDeclaration',
+      identifier,
+      init,
+    }
+  }
+
+  /** VariableInitializer
+   * : SIMPLE_ASSIGN AssignmentExpression
+   * ;
+   * 
+   */
+  VariableInitializer() {
+    this._eat('SIMPLE_ASSIGN');
+    return this.AssignmentExpression();
   }
 
   /** 
