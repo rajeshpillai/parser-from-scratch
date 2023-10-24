@@ -17,6 +17,7 @@ const tests = [
   require('./while-test.js'),
   require('./do-while-test.js'),
   require('./for-test.js'),
+  require('./function-declaration-test.js'),
 ];
 
 const parser = new Parser();
@@ -25,21 +26,17 @@ const parser = new Parser();
 // For manual test
 function exec() {
   const program = `
-      do {
-        x -= 1;
-      } while(x > 10);
+    def square(x) {
+      return x * x;
+    }
 
-      for (let i = 0; i < 10; i += 1) {
-        x += i;
-      }
+    def empty() {
+      return;
+    }
 
-      for (let i = 0, z = 0;  i < 10; i += 1) {
-        x += i;
-      }
+    def multipleparam(x, y) {}
 
-      for (; ;) {
-        x += i;
-      }
+    //square(2);
   `;  
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, null, 2));
