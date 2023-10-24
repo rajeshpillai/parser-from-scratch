@@ -13,6 +13,7 @@ const tests = [
   require('./relational-test.js'),
   require('./equality-test.js'),
   require('./logical-test.js'),
+  require('./unary-test.js'),
 ];
 
 const parser = new Parser();
@@ -70,6 +71,10 @@ function exec() {
       x > 5 && y < 10; // (x > 5) && (y < 10)
 
       x > 5 || y < 10; // (x > 5) || (y < 10)
+
+      // Unary operator 
+      !x; 
+      -x;
 
 
   `;  

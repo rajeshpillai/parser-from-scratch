@@ -226,14 +226,7 @@ class Parser {
     }
   }
 
-  /** 
-   * LeftHandSideExpression 
-   * : Identifier 
-   * ;
-   */
-  LeftHandSideExpression() { 
-    return this.Identifier();
-  }
+
 
   /** 
    * Identifier 
@@ -341,11 +334,11 @@ class Parser {
 
   /** 
    * MultiplicativeExpression 
-   *  : PrimaryExpression
+   *  : UnaryExpression
    *  | MultiplicativeExpression MULTIPLICATIVE_OPERATOR PrimaryExpression -> PrimaryExpression MULTIPLICATIVE_OPERATOR MultiplicativeExpression
    */
    MultiplicativeExpression() {
-    return this._BinaryExpression('PrimaryExpression', 'MULTIPLICATIVE_OPERATOR')
+    return this._BinaryExpression('UnaryExpression', 'MULTIPLICATIVE_OPERATOR')
    }
 
    /** Generic helper for LogicalExpression nodes */
@@ -369,6 +362,7 @@ class Parser {
    */
 
   _BinaryExpression(builderName, operatorToken) {
+    //console.log('BUILDERNAME: ', builderName);
     let left = this[builderName]();
     while(this._lookahead.type === operatorToken) {
       const operator = this._eat(operatorToken).value;
@@ -382,12 +376,45 @@ class Parser {
     }
     return left;
   }
+  /** UnaryExpression 
+   * : LeftHandSideExpression 
+   * | ADDITIVE_OPERATOR UnaryExpression
+   * | LOGICAL_NOT UnaryExpression
+   */
+  UnaryExpression() {
+    let operator;
+    switch(this._lookahead.type) {
+      case 'ADDITIVE_OPERATOR':
+        operator = this._eat('ADDITIVE_OPERATOR').value;
+        break;
+      case 'LOGICAL_NOT': 
+        operator = this._eat('LOGICAL_NOT').value;
+        break;
+    }
+    if (operator != null) {
+      return {
+        type: 'UnaryExpression',
+        operator,
+        argument: this.UnaryExpression(), // allows to do chain unary operations, e.g. - - 42
+      }
+    }
+    return this.LeftHandSideExpression();
+  }
+
+  /** 
+   * LeftHandSideExpression 
+   * : PrimaryExpression 
+   * ;
+   */
+    LeftHandSideExpression() { 
+      return this.PrimaryExpression();
+    }
 
   /** 
    * PrimaryExpression
    *  : Literal
    *  | ParenthesizedExpression
-   *  | LeftHandSideExpression
+   *  | Identifier
    *  ;
    */
   PrimaryExpression() {
@@ -397,6 +424,8 @@ class Parser {
     switch(this._lookahead.type) {
       case '(': 
         return this.ParenthesizedExpression(); 
+      case 'IDENTIFIER':
+        return this.Identifier();
       default: 
         return this.LeftHandSideExpression();
     }
