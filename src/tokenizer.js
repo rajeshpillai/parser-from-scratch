@@ -14,11 +14,25 @@ const Spec = [
   [/^\(/, '('],           
   [/^\)/, ')'],           
 
+  // ----------------------------------------
+  // NUmber should be above Identifiers
+  [/^\d+/, 'NUMBER'],    // number
+
+  // ----------------------------------------
+  // Identifiers
+  [/^\w+/, 'IDENTIFIER'],
+
+  // ----------------------------------------
+  // Asignment operators: = , *=, /=, +=, -= 
+
+  [/^=/, 'SIMPLE_ASSIGN'],
+  [/^[\*\/\+\-]=/,'COMPLEX_ASSIGN'],
+
   // Math operators: +, -, *, / 
   [/^[+\-]/, 'ADDITIVE_OPERATOR'],
   [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],
   
-  [/^\d+/, 'NUMBER'],    // number
+  
 
   [/"[^"]*"/, 'STRING'], // double quoted string
   [/'[^']*'/, 'STRING'], // single quoted string
