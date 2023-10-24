@@ -47,6 +47,12 @@ const Spec = [
   // Relational operators: >, >=, <, <= 
   [/^[><]=?/, 'RELATIONAL_OPERATOR'],
 
+  // ----------------------------------------
+  // Logical operators: &&, || 
+
+  [/^&&/, 'LOGICAL_AND'], 
+  [/^\|\|/, 'LOGICAL_OR'],
+
   // Math operators: +, -, *, / 
   [/^[+\-]/, 'ADDITIVE_OPERATOR'],
   [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],
